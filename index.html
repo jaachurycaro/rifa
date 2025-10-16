@@ -435,9 +435,8 @@
                         configSection.classList.add('hidden');
                         generateParticipantList();
                     } else {
-                        // Si la rifa está configurada, el cliente debe ver la cuadrícula, no el panel de entrada.
-                        participantView.classList.remove('hidden');
-                        businessLogo.classList.remove('hidden');
+                        // Si no es admin, siempre empezar en el panel de entrada
+                        entryPanel.classList.remove('hidden');
                     }
                 } else {
                     if (isAdmin) {
@@ -445,7 +444,7 @@
                         manageSection.classList.add('hidden');
                         configSection.classList.remove('hidden');
                     } else {
-                        entryPanel.classList.remove('hidden');
+                        entryPanel.classList.remove('hidden'); // También mostrar el panel de entrada si no hay rifa
                     }
                 }
             }
