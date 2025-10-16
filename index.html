@@ -237,14 +237,18 @@
             <p id="raffle-title-display"></p>
         </header>
 
-        <div id="admin-login-panel" class="panel">
-            <h2>Acceso de Administrador</h2>
-            <p>Ingresa la contraseña para acceder al panel de control.</p>
-            <div class="form-group">
+        <div id="entry-panel" class="panel">
+            <h2>Bienvenido</h2>
+            <p>Selecciona cómo quieres continuar.</p>
+            <div id="entry-buttons" class="modal-buttons">
+                <button id="customer-entry-btn" class="btn btn-success">Ver Rifa</button>
+                <button id="admin-entry-btn" class="btn btn-primary">Administrar Rifa</button>
+            </div>
+            <div id="admin-login-form" class="hidden" style="margin-top: 20px;">
                 <label for="admin-password">Contraseña:</label>
                 <input type="password" id="admin-password" placeholder="••••••••">
+                <button id="login-btn" class="btn btn-primary mt-10">Ingresar</button> 
             </div>
-            <button id="login-btn" class="btn btn-primary">Ingresar</button> 
             <p id="login-error" class="hidden login-error-text">Contraseña incorrecta.</p>
         </div>
 
@@ -349,11 +353,13 @@
             const businessLogo = document.getElementById('business-logo');
             const mainTitle = document.getElementById('main-title');
             const raffleTitleDisplay = document.getElementById('raffle-title-display');
-            const adminLoginPanel = document.getElementById('admin-login-panel');
+            const entryPanel = document.getElementById('entry-panel');
             const adminConfigPanel = document.getElementById('admin-config-panel');
             const participantView = document.getElementById('participant-view');
             const winnerDisplay = document.getElementById('winner-display');
             const adminPasswordInput = document.getElementById('admin-password');
+            const adminEntryBtn = document.getElementById('admin-entry-btn');
+            const customerEntryBtn = document.getElementById('customer-entry-btn');
             const loginBtn = document.getElementById('login-btn');
             const loginError = document.getElementById('login-error');
             const configSection = document.getElementById('config-section');
@@ -405,7 +411,7 @@
             }
 
             function updateUI(isAdmin = false) {
-                [adminLoginPanel, adminConfigPanel, participantView, winnerDisplay].forEach(el => el.classList.add('hidden'));
+                [entryPanel, adminConfigPanel, participantView, winnerDisplay].forEach(el => el.classList.add('hidden'));
                 businessLogo.classList.add('hidden');
                 
                 mainTitle.textContent = raffleState.isConfigured ? 'Rifa Activa' : 'Sistema de Rifa';
@@ -437,7 +443,7 @@
                         manageSection.classList.add('hidden');
                         configSection.classList.remove('hidden');
                     } else {
-                        adminLoginPanel.classList.remove('hidden');
+                        entryPanel.classList.remove('hidden');
                     }
                 }
             }
@@ -589,6 +595,21 @@
             }
 
             // --- MANEJADORES DE EVENTOS ---
+            adminEntryBtn.addEventListener('click', () => {
+                document.getElementById('admin-login-form').classList.remove('hidden');
+                document.getElementById('entry-buttons').classList.add('hidden');
+                adminPasswordInput.focus();
+            });
+
+            customerEntryBtn.addEventListener('click', () => {
+                if (raffleState.isConfigured) {
+                    entryPanel.classList.add('hidden');
+                    updateUI(false); // Forzar la vista de cliente
+                } else {
+                    alert('La rifa no está disponible en este momento. Vuelve a intentarlo más tarde.');
+                }
+            });
+
             loginBtn.addEventListener('click', () => {
                 if (adminPasswordInput.value === ADMIN_PASSWORD) {
                     sessionStorage.setItem('isAdmin', 'true');
