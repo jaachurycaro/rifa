@@ -275,6 +275,7 @@
                 </div>
                 <button id="generate-qr-btn" class="btn btn-secondary">Generar QR</button>
                 <button id="reset-raffle-btn" class="btn btn-danger ml-10">Reiniciar Rifa</button>
+                <button id="logout-btn" class="btn btn-primary ml-10">Cerrar Sesión</button>
                 <button id="toggle-list-btn" class="btn btn-primary mt-10">Mostrar Lista de Participantes</button>
                 <button id="export-csv-btn" class="btn btn-secondary mt-10 ml-10">Exportar a CSV</button>
                 <div id="participant-list-container" class="hidden">
@@ -363,6 +364,7 @@
             const createRaffleBtn = document.getElementById('create-raffle-btn');
             const qrUrlInput = document.getElementById('qr-url');
             const generateQrBtn = document.getElementById('generate-qr-btn');
+            const logoutBtn = document.getElementById('logout-btn');
             const resetRaffleBtn = document.getElementById('reset-raffle-btn');
             const raffleGrid = document.getElementById('raffle-grid');
             const qrCodeContainer = document.getElementById('qr-code-container');
@@ -493,8 +495,8 @@
                                      <td>${participant.name}</td>
                                      <td>${participant.phone || 'No registrado'}</td>
                                      <td class="actions-cell">
-                                        <button class="btn btn-primary action-btn edit-btn" data-number="${number}">Editar</button>
-                                        <button class="btn btn-danger action-btn delete-btn" data-number="${number}">Eliminar</button>
+                                        <button class="btn btn-primary action-btn edit-btn" data-number="">Editar</button>
+                                        <button class="btn btn-danger action-btn delete-btn" data-number="">Eliminar</button>
                                      </td>`;
                     participantListBody.appendChild(row);
                 }
@@ -608,6 +610,11 @@
                 raffleState = { title, totalNumbers, price, participants: {}, isConfigured: true, winner: null };
                 saveState();
                 updateUI(true);
+            });
+
+            logoutBtn.addEventListener('click', () => {
+                sessionStorage.removeItem('isAdmin');
+                window.location.reload();
             });
 
             generateQrBtn.addEventListener('click', () => {
