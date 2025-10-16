@@ -13,7 +13,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* --- (Todos los estilos CSS permanecen igual, no es necesario mostrarlos aquí para abreviar) --- */
         :root {
             --bg-gradient-start: #1a2a6c;
             --bg-gradient-end: #2e0854;
@@ -138,7 +137,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- 1. CONFIGURACIÓN DE FIREBASE ---
-            // PEGA AQUÍ EL CÓDIGO de firebaseConfig QUE COPIASTE
             const firebaseConfig = {
               apiKey: "AIzaSyD8ECDtHZfUzcO5ZvUayc9uGjajsFPEwBo",
               authDomain: "rifa-amor-propio.firebaseapp.com",
@@ -373,7 +371,12 @@
                     return;
                 }
                 const newState = { title, totalNumbers, price, participants: {}, isConfigured: true };
-                raffleRef.set(newState);
+                raffleRef.set(newState, (error) => {
+                    if (error) {
+                        console.error("Error al crear la rifa:", error);
+                        alert("Hubo un error al crear la rifa. Revisa la consola para más detalles (puedes abrirla con F12).");
+                    }
+                });
             });
 
             logoutBtn.addEventListener('click', () => {
@@ -394,7 +397,7 @@
                 const phone = participantPhoneInput.value.trim();
                 if (name && currentNumberToRegister) {
                     const participantData = { name, phone };
-                    database.ref(`raffleState/participants/`).set(participantData);
+                    database.ref(`raffleState/participants/${currentNumberToRegister}`).set(participantData);
                     closeModal();
                 } else {
                     alert('Por favor, ingresa al menos un nombre.');
