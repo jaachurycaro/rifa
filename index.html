@@ -417,35 +417,24 @@
                 mainTitle.textContent = raffleState.isConfigured ? 'Rifa Activa' : 'Sistema de Rifa';
                 raffleTitleDisplay.textContent = raffleState.title;
 
-                if (raffleState.winner) {
-                    winnerNumberEl.textContent = formatNumber(raffleState.winner.number);
-                    winnerNameEl.textContent = raffleState.winner.name;
-                    winnerPhoneEl.textContent = raffleState.winner.phone || 'No registrado';
-                    winnerDisplay.classList.remove('hidden');
-                    if (isAdmin) {
-                        adminConfigPanel.classList.remove('hidden');
-                        manageSection.classList.remove('hidden');
-                        configSection.classList.add('hidden');
-                    }
-                } else if (raffleState.isConfigured) {
-                    generateRaffleGrid();
-                    if (isAdmin) {
-                        adminConfigPanel.classList.remove('hidden');
+                if (isAdmin) {
+                    // --- VISTA DE ADMINISTRADOR ---
+                    adminConfigPanel.classList.remove('hidden');
+                    if (raffleState.isConfigured) {
                         manageSection.classList.remove('hidden');
                         configSection.classList.add('hidden');
                         generateParticipantList();
+                        generateRaffleGrid(); // También generar la grilla para que el admin la vea
                     } else {
-                        // Si no es admin, siempre empezar en el panel de entrada
-                        entryPanel.classList.remove('hidden');
-                    }
-                } else {
-                    if (isAdmin) {
-                        adminConfigPanel.classList.remove('hidden');
                         manageSection.classList.add('hidden');
                         configSection.classList.remove('hidden');
-                    } else {
-                        entryPanel.classList.remove('hidden'); // También mostrar el panel de entrada si no hay rifa
                     }
+                } else {
+                    // --- VISTA PÚBLICA (CLIENTE) ---
+                    entryPanel.classList.remove('hidden');
+                    // Resetear el formulario de login por si acaso
+                    document.getElementById('admin-login-form').classList.add('hidden');
+                    document.getElementById('entry-buttons').classList.remove('hidden');
                 }
             }
 
@@ -605,7 +594,9 @@
             customerEntryBtn.addEventListener('click', () => {
                 if (raffleState.isConfigured) {
                     entryPanel.classList.add('hidden');
-                    updateUI(false); // Forzar la vista de cliente
+                    participantView.classList.remove('hidden');
+                    businessLogo.classList.remove('hidden');
+                    generateRaffleGrid();
                 } else {
                     alert('La rifa no está disponible en este momento. Vuelve a intentarlo más tarde.');
                 }
