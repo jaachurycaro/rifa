@@ -428,14 +428,16 @@
                         configSection.classList.add('hidden');
                     }
                 } else if (raffleState.isConfigured) {
-                    participantView.classList.remove('hidden');
-                    businessLogo.classList.remove('hidden');
                     generateRaffleGrid();
                     if (isAdmin) {
                         adminConfigPanel.classList.remove('hidden');
                         manageSection.classList.remove('hidden');
                         configSection.classList.add('hidden');
                         generateParticipantList();
+                    } else {
+                        // Si la rifa está configurada, el cliente debe ver la cuadrícula, no el panel de entrada.
+                        participantView.classList.remove('hidden');
+                        businessLogo.classList.remove('hidden');
                     }
                 } else {
                     if (isAdmin) {
