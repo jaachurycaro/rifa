@@ -392,6 +392,23 @@
                 }
             });
 
+            generateQrBtn.addEventListener('click', () => {
+                const url = qrUrlInput.value.trim();
+                if (url) {
+                    qrCodeContainer.innerHTML = ''; // Limpiar QR anterior
+                    new QRCode(qrCodeContainer, {
+                        text: url,
+                        width: 128,
+                        height: 128,
+                        colorDark : "#e0e6f1",
+                        colorLight : "rgba(10, 25, 47, 0.85)",
+                        correctLevel : QRCode.CorrectLevel.H
+                    });
+                } else {
+                    alert('Por favor, ingresa una URL para generar el código QR.');
+                }
+            });
+
             confirmNameBtn.addEventListener('click', () => {
                 const name = participantNameInput.value.trim();
                 const phone = participantPhoneInput.value.trim();
