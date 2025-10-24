@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Rifa Futurista</title>
     <!-- SDK de Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
     
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,6 +45,10 @@
                 <button id="admin-entry-btn" class="btn btn-primary">Administrar Rifa</button>
             </div>
             <div id="admin-login-form" class="hidden" style="margin-top: 20px;">
+                <div class="form-group">
+                    <label for="admin-email">Correo Electrónico:</label>
+                    <input type="email" id="admin-email" placeholder="admin@ejemplo.com">
+                </div>
                 <label for="admin-password">Contraseña:</label>
                 <input type="password" id="admin-password" placeholder="••••••••">
                 <button id="login-btn" class="btn btn-primary mt-10">Ingresar</button> 
@@ -152,8 +157,13 @@
             const database = firebase.database();
             const raffleRef = database.ref('raffleState');
 
-            // --- CONSTANTES Y VARIABLES GLOBALES ---
-            const ADMIN_PASSWORD = 'amor propio2025';
+            // --- CONSTANTES Y VARIABLES GLOBALES --- 
+            // ¡ADVERTENCIA DE SEGURIDAD!
+            // Esta contraseña es visible en el código fuente. Cualquiera puede verla.
+            // Para un entorno de producción, DEBES usar Firebase Authentication para proteger el acceso de administrador.
+            // No subas esta contraseña a un repositorio público como GitHub.
+            const ADMIN_PASSWORD = 'amor propio2025'; 
+
             let raffleState = {}; // El estado ahora vendrá de Firebase
             let currentNumberToRegister = null;
 
@@ -286,8 +296,8 @@
                                      <td>${participant.name}</td>
                                      <td>${participant.phone || 'No registrado'}</td>
                                      <td class="actions-cell">
-                                        <button class="btn btn-primary action-btn edit-btn" data-number="">Editar</button>
-                                        <button class="btn btn-danger action-btn delete-btn" data-number="">Eliminar</button>
+                                        <button class="btn btn-primary action-btn edit-btn" data-number="${number}">Editar</button>
+                                        <button class="btn btn-danger action-btn delete-btn" data-number="${number}">Eliminar</button>
                                      </td>`;
                     participantListBody.appendChild(row);
                 }
@@ -309,7 +319,8 @@
                     participantNameInput.focus();
                 } else if (target.classList.contains('delete-btn')) {
                     if (confirm(`¿Estás seguro de que quieres eliminar al participante del número ${formatNumber(number)}? El número quedará disponible.`)) {
-                        database.ref(`raffleState/participants/`).remove();
+                        // CORRECCIÓN: Apuntar al número específico para eliminarlo, no a todos los participantes.
+                        database.ref(`raffleState/participants/${number}`).remove();
                     }
                 }
             }
@@ -371,12 +382,7 @@
                     return;
                 }
                 const newState = { title, totalNumbers, price, participants: {}, isConfigured: true };
-                raffleRef.set(newState, (error) => {
-                    if (error) {
-                        console.error("Error al crear la rifa:", error);
-                        alert("Hubo un error al crear la rifa. Revisa la consola para más detalles (puedes abrirla con F12).");
-                    }
-                });
+                raffleRef.set(newState);
             });
 
             logoutBtn.addEventListener('click', () => {
@@ -392,28 +398,13 @@
                 }
             });
 
-            generateQrBtn.addEventListener('click', () => {
-                const url = qrUrlInput.value.trim();
-                if (url) {
-                    qrCodeContainer.innerHTML = ''; // Limpiar QR anterior
-                    new QRCode(qrCodeContainer, {
-                        text: url,
-                        width: 128,
-                        height: 128,
-                        colorDark : "#e0e6f1",
-                        colorLight : "rgba(10, 25, 47, 0.85)",
-                        correctLevel : QRCode.CorrectLevel.H
-                    });
-                } else {
-                    alert('Por favor, ingresa una URL para generar el código QR.');
-                }
-            });
-
             confirmNameBtn.addEventListener('click', () => {
                 const name = participantNameInput.value.trim();
                 const phone = participantPhoneInput.value.trim();
                 if (name && currentNumberToRegister) {
                     const participantData = { name, phone };
+                    // CORRECCIÓN: Usar el número actual para crear o actualizar una entrada específica
+                    // en lugar de sobrescribir todos los participantes.
                     database.ref(`raffleState/participants/${currentNumberToRegister}`).set(participantData);
                     closeModal();
                 } else {
