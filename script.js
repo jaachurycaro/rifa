@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const businessLogo = document.getElementById('business-logo');
     const mainTitle = document.getElementById('main-title');
     const raffleTitleDisplay = document.getElementById('raffle-title-display');
+    const rafflePrizeInfo = document.getElementById('raffle-prize-info');
+    const raffleDetailsDisplay = document.getElementById('raffle-details-display');
     const entryPanel = document.getElementById('entry-panel');
     const adminConfigPanel = document.getElementById('admin-config-panel');
     const participantView = document.getElementById('participant-view');
@@ -43,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const raffleTitleInput = document.getElementById('raffle-title');
     const totalNumbersInput = document.getElementById('total-numbers');
     const rafflePriceInput = document.getElementById('raffle-price');
+    const raffleDateInput = document.getElementById('raffle-date');
+    const raffleLotteryInfoInput = document.getElementById('raffle-lottery-info');
     const createRaffleBtn = document.getElementById('create-raffle-btn');
     const qrUrlInput = document.getElementById('qr-url');
     const generateQrBtn = document.getElementById('generate-qr-btn');
@@ -73,11 +77,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LÓGICA DE LA APLICACIÓN ---
     function updateUI(isAdmin = false) {
-        [entryPanel, adminConfigPanel, participantView, winnerDisplay].forEach(el => el.classList.add('hidden'));
+        [entryPanel, adminConfigPanel, participantView, winnerDisplay, rafflePrizeInfo].forEach(el => el.classList.add('hidden'));
         businessLogo.classList.add('hidden');
 
         mainTitle.textContent = raffleState.isConfigured ? 'Rifa Activa' : 'Sistema de Rifa';
         raffleTitleDisplay.textContent = raffleState.title || '';
+        
+        if (raffleState.isConfigured) {
+            rafflePrizeInfo.classList.remove('hidden');
+            const dateText = raffleState.date ? `Fecha: ${raffleState.date}` : '';
+            const lotteryText = raffleState.lotteryInfo || '';
+            raffleDetailsDisplay.textContent = `${lotteryText} - ${dateText}`;
+        } else {
+            raffleDetailsDisplay.textContent = '';
+        }
 
         if (isAdmin) {
             // --- VISTA DE ADMINISTRADOR ---
@@ -271,11 +284,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = raffleTitleInput.value.trim();
         const totalNumbers = parseInt(totalNumbersInput.value, 10);
         const price = parseInt(rafflePriceInput.value, 10);
-        if (!title || !totalNumbers || totalNumbers <= 0 || isNaN(price) || price < 0) {
+        const date = raffleDateInput.value;
+        const lotteryInfo = raffleLotteryInfoInput.value.trim();
+
+        if (!title || !totalNumbers || totalNumbers <= 0 || isNaN(price) || price < 0 || !date || !lotteryInfo) {
             alert('Por favor, completa todos los campos de configuración correctamente.');
             return;
         }
-        const newState = { title, totalNumbers, price, participants: {}, isConfigured: true };
+        const newState = { title, totalNumbers, price, date, lotteryInfo, participants: {}, isConfigured: true };
         raffleRef.set(newState);
     });
 
@@ -285,7 +301,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     resetRaffleBtn.addEventListener('click', () => {
         if (confirm('¿Estás seguro de que quieres reiniciar la rifa? Se perderán todos los datos actuales.')) {
-            raffleRef.remove();
+            // Al eliminar la referencia, el listener 'raffleRef.on' se activará automáticamente
+            // y actualizará la UI para mostrar la pantalla de configuración.
+            raffleRef.remove()
+                .catch(error => console.error("Error al reiniciar la rifa:", error));
         }
     });
 
@@ -307,22 +326,25 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelNameBtn.addEventListener('click', closeModal);
     modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
     toggleListBtn.addEventListener('click', () => participantListContainer.classList.toggle('hidden'));
-    exportCsvBtn.addEventListener('click', exportToCsv);
-    exitParticipantViewBtn.addEventListener('click', () => window.location.reload());
+    exportCsvBtn.addEventListener('click', exportToCsv); 
+    document.getElementById('exit-participant-view-btn').addEventListener('click', () => window.location.reload());
 
     // --- INICIALIZACIÓN ---
+    let currentUser = null;
+
+    // 1. Escuchar cambios en la autenticación (login/logout)
     auth.onAuthStateChanged(user => {
-        // Este listener se ejecuta cada vez que el estado de autenticación cambia (login/logout)
-        // y también al cargar la página.
-        
-        // Primero, nos suscribimos a los datos de la rifa.
-        raffleRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            raffleState = data ? data : { isConfigured: false };
-            
-            // Ahora, con los datos de la rifa y el estado del usuario, actualizamos la UI.
-            const isAdmin = !!user; // Si 'user' existe, isAdmin es true.
-            updateUI(isAdmin);
-        });
+        currentUser = user;
+        // Una vez que sabemos si el usuario está logueado o no, actualizamos la UI.
+        // La data de la rifa ya la tenemos gracias al otro listener.
+        updateUI(!!currentUser);
+    });
+
+    // 2. Escuchar cambios en los datos de la rifa
+    raffleRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        raffleState = data ? data : { isConfigured: false };
+        // Actualizamos la UI con los nuevos datos de la rifa.
+        updateUI(!!currentUser);
     });
 });

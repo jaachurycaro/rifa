@@ -10,24 +10,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
     
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-gradient-start: #1a2a6c;
-            --bg-gradient-end: #2e0854;
-            --container-bg: rgba(10, 25, 47, 0.85);
-            --text-color: #e0e6f1;
-            --primary-glow: #00e5ff;
-            --secondary-glow: #f0f;
-            --success-glow: #39ff14;
-            --danger-glow: #ff4d00;
-            --font-family: 'Rajdhani', sans-serif;
-            --border-radius: 8px;
-        }
-        body{font-family:var(--font-family);margin:0;padding:20px;background:linear-gradient(135deg,var(--bg-gradient-start),var(--bg-gradient-end));background-attachment:fixed;color:var(--text-color);display:flex;flex-direction:column;align-items:center;min-height:100vh}.container{width:100%;max-width:900px;background-color:var(--container-bg);padding:25px;border-radius:var(--border-radius);border:1px solid var(--primary-glow);box-shadow:0 0 25px rgba(0,229,255,.3);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}h1,h2,h3{text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--primary-glow);text-shadow:0 0 5px var(--primary-glow),0 0 10px var(--primary-glow)}h1{font-size:2.5em}h2{font-size:2em}h3{font-size:1.5em;margin-bottom:15px}p{line-height:1.6}.panel{border:none;padding:20px;border-radius:var(--border-radius);margin-bottom:20px;background-color:rgba(255,255,255,.05)}.form-group{margin-bottom:15px}.form-group label{display:block;margin-bottom:8px;font-weight:500;color:var(--primary-glow)}.form-group input{width:100%;padding:12px;border:1px solid var(--primary-glow);border-radius:4px;box-sizing:border-box;background-color:rgba(0,0,0,.3);color:var(--text-color);font-family:var(--font-family);font-size:1em}.form-group input::placeholder{color:rgba(224,230,241,.5)}.btn{display:inline-block;padding:12px 25px;font-size:16px;font-weight:700;text-align:center;text-decoration:none;text-transform:uppercase;border-radius:5px;cursor:pointer;border:2px solid;background-color:transparent;transition:all .3s ease}.btn-primary{color:var(--primary-glow);border-color:var(--primary-glow)}.btn-primary:hover{background-color:var(--primary-glow);color:var(--bg-gradient-start);box-shadow:0 0 15px var(--primary-glow)}.btn-secondary{color:var(--secondary-glow);border-color:var(--secondary-glow)}.btn-secondary:hover{background-color:var(--secondary-glow);color:var(--bg-gradient-start);box-shadow:0 0 15px var(--secondary-glow)}.btn-success{color:var(--success-glow);border-color:var(--success-glow)}.btn-success:hover{background-color:var(--success-glow);color:var(--bg-gradient-start);box-shadow:0 0 15px var(--success-glow)}.btn-danger{color:var(--danger-glow);border-color:var(--danger-glow)}.btn-danger:hover{background-color:var(--danger-glow);color:#fff;box-shadow:0 0 15px var(--danger-glow)}.btn:disabled{border-color:#555;color:#555;cursor:not-allowed;background-color:transparent;box-shadow:none}.hidden{display:none}#raffle-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(85px,1fr));gap:12px;margin-top:20px}.raffle-number{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;border-radius:var(--border-radius);cursor:pointer;text-align:center;transition:all .3s ease;min-height:70px;border:1px solid;background-color:rgba(0,0,0,.2)}.raffle-number .number{font-size:1.8em;font-weight:700}.raffle-number .participant{font-size:.8em;word-break:break-word;margin-top:4px}.raffle-number.available{border-color:var(--success-glow);color:var(--success-glow)}.raffle-number.available:hover{background-color:var(--success-glow);color:var(--bg-gradient-start);transform:scale(1.05);box-shadow:0 0 15px var(--success-glow)}.raffle-number.taken{border-color:var(--danger-glow);color:var(--danger-glow);cursor:not-allowed;background-color:rgba(255,77,0,.1)}#winner-display{text-align:center;padding:40px 20px;border:2px dashed var(--secondary-glow);border-radius:var(--border-radius);position:relative;overflow:hidden;background:radial-gradient(circle,rgba(255,0,255,.2) 0%,rgba(0,0,0,0) 70%);box-shadow:0 0 30px var(--secondary-glow)}#winner-display h2{color:var(--secondary-glow);text-shadow:0 0 5px var(--secondary-glow);font-size:2.8em}#winner-display p{font-size:1.8em}#winner-display strong{color:var(--text-color);font-weight:700}#qr-code-container{text-align:center;margin-top:20px}#qr-code{display:inline-block;margin-top:10px;padding:10px;background:#fff;border:2px solid var(--primary-glow)}#raffle-title-display{text-align:center;font-size:1.5em;color:var(--text-color)}#modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;transition:opacity .3s ease;pointer-events:none}#modal-overlay.visible{opacity:1;pointer-events:all}#name-modal{background-color:var(--container-bg);padding:30px;border-radius:var(--border-radius);border:1px solid var(--secondary-glow);box-shadow:0 0 25px rgba(255,0,255,.4);width:90%;max-width:400px;text-align:center}#name-modal h3{color:var(--secondary-glow);text-shadow:0 0 5px var(--secondary-glow)}.modal-price{font-size:1.2em;font-weight:700;color:var(--success-glow);text-shadow:0 0 8px var(--success-glow);margin:10px 0}#modal-buttons{margin-top:20px;display:flex;justify-content:space-around}#participant-list-container{margin-top:20px;max-height:300px;overflow-y:auto;border:1px solid var(--primary-glow);border-radius:var(--border-radius);padding:15px;background-color:rgba(0,0,0,.2)}#participant-table{width:100%;border-collapse:collapse}#participant-table th,#participant-table td{padding:12px;text-align:left;border-bottom:1px solid rgba(0,229,255,.2)}#participant-table th{color:var(--primary-glow);font-weight:700;position:sticky;top:0;background-color:var(--container-bg)}.login-error-text{color:var(--danger-glow);margin-top:10px}#manage-section{margin-top:20px}.ml-10{margin-left:10px}.mt-10{margin-top:10px}.download-qr-link{display:block;margin-top:10px;color:var(--primary-glow)}#business-logo{display:block;margin:20px auto;max-width:150px;border-radius:50%;border:2px solid var(--primary-glow);box-shadow:0 0 15px rgba(0,229,255,.5)}.action-btn{padding:5px 10px;font-size:12px;margin-right:5px}#participant-table .actions-cell{text-align:center;min-width:140px}.confetti{position:absolute;width:8px;height:15px;background-color:var(--primary-glow);opacity:.9;animation:fall 5s linear forwards;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}@keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -35,6 +19,8 @@
             <h1 id="main-title">Sistema de Rifa</h1>
             <img id="business-logo" src="amor_propio_logo.png" alt="Logo del Negocio" class="hidden">
             <p id="raffle-title-display"></p>
+            <p id="raffle-prize-info" class="raffle-prize-info hidden">El premio será solo productos de la tienda, no efectivo.</p>
+            <p id="raffle-details-display" class="raffle-details"></p>
         </header>
 
         <div id="entry-panel" class="panel">
@@ -44,14 +30,16 @@
                 <button id="customer-entry-btn" class="btn btn-success">Ver Rifa</button>
                 <button id="admin-entry-btn" class="btn btn-primary">Administrar Rifa</button>
             </div>
-            <div id="admin-login-form" class="hidden" style="margin-top: 20px;">
+            <div id="admin-login-form" class="hidden mt-20">
                 <div class="form-group">
                     <label for="admin-email">Correo Electrónico:</label>
                     <input type="email" id="admin-email" placeholder="admin@ejemplo.com">
                 </div>
-                <label for="admin-password">Contraseña:</label>
-                <input type="password" id="admin-password" placeholder="••••••••">
-                <button id="login-btn" class="btn btn-primary mt-10">Ingresar</button> 
+                <div class="form-group">
+                    <label for="admin-password">Contraseña:</label>
+                    <input type="password" id="admin-password" placeholder="••••••••">
+                </div>
+                <button id="login-btn" class="btn btn-primary mt-10">Ingresar</button>
             </div>
             <p id="login-error" class="hidden login-error-text">Contraseña incorrecta.</p>
         </div>
@@ -72,6 +60,14 @@
                     <label for="raffle-price">Precio del Número (Ej: 2000):</label>
                     <input type="number" id="raffle-price" placeholder="2000" min="0">
                 </div>
+                <div class="form-group">
+                    <label for="raffle-date">Fecha del Sorteo:</label>
+                    <input type="date" id="raffle-date">
+                </div>
+                <div class="form-group">
+                    <label for="raffle-lottery-info">Información del Sorteo:</label>
+                    <input type="text" id="raffle-lottery-info" value="Juega con las dos últimas cifras de la Lotería de Boyacá">
+                </div>
                 <button id="create-raffle-btn" class="btn btn-primary">Crear Rifa</button>
             </div>
             
@@ -81,11 +77,13 @@
                     <label for="qr-url">URL para el Código QR:</label>
                     <input type="text" id="qr-url" placeholder="Pega aquí la URL de la página de la rifa">
                 </div>
-                <button id="generate-qr-btn" class="btn btn-secondary">Generar QR</button>
-                <button id="reset-raffle-btn" class="btn btn-danger ml-10">Reiniciar Rifa</button>
-                <button id="logout-btn" class="btn btn-primary ml-10">Cerrar Sesión</button>
-                <button id="toggle-list-btn" class="btn btn-primary mt-10">Mostrar Lista de Participantes</button>
-                <button id="export-csv-btn" class="btn btn-secondary mt-10 ml-10">Exportar a CSV</button>
+                <div class="form-group">
+                    <button id="generate-qr-btn" class="btn btn-secondary">Generar QR</button>
+                    <button id="reset-raffle-btn" class="btn btn-danger ml-10">Reiniciar Rifa</button>
+                    <button id="logout-btn" class="btn btn-primary ml-10">Cerrar Sesión</button>
+                    <button id="toggle-list-btn" class="btn btn-primary mt-10">Mostrar Lista de Participantes</button>
+                    <button id="export-csv-btn" class="btn btn-secondary mt-10 ml-10">Exportar a CSV</button>
+                </div>
                 <div id="participant-list-container" class="hidden">
                     <h3>Lista de Participantes</h3>
                     <table id="participant-table">
@@ -107,6 +105,7 @@
         <div id="participant-view" class="panel hidden">
             <h2>¡Elige tu número de la suerte!</h2>
             <p>Haz clic en un número disponible (verde neón) para registrar tus datos.</p>
+            <button id="exit-participant-view-btn" class="btn btn-danger mt-10">Salir</button>
             <div id="raffle-grid"></div>
         </div>
 
@@ -139,294 +138,7 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- 1. CONFIGURACIÓN DE FIREBASE ---
-            const firebaseConfig = {
-              apiKey: "AIzaSyD8ECDtHZfUzcO5ZvUayc9uGjajsFPEwBo",
-              authDomain: "rifa-amor-propio.firebaseapp.com",
-              databaseURL: "https://rifa-amor-propio-default-rtdb.firebaseio.com",
-              projectId: "rifa-amor-propio",
-              storageBucket: "rifa-amor-propio.firebasestorage.app",
-              messagingSenderId: "994708612143",
-              appId: "1:994708612143:web:3584f38ced5542dd3a12da"
-            };
-
-            // Inicializar Firebase
-            firebase.initializeApp(firebaseConfig);
-            const database = firebase.database();
-            const raffleRef = database.ref('raffleState');
-
-            // --- CONSTANTES Y VARIABLES GLOBALES --- 
-            // ¡ADVERTENCIA DE SEGURIDAD!
-            // Esta contraseña es visible en el código fuente. Cualquiera puede verla.
-            // Para un entorno de producción, DEBES usar Firebase Authentication para proteger el acceso de administrador.
-            // No subas esta contraseña a un repositorio público como GitHub.
-            const ADMIN_PASSWORD = 'amor propio2025'; 
-
-            let raffleState = {}; // El estado ahora vendrá de Firebase
-            let currentNumberToRegister = null;
-
-            // --- ELEMENTOS DEL DOM ---
-            const businessLogo = document.getElementById('business-logo');
-            const mainTitle = document.getElementById('main-title');
-            const raffleTitleDisplay = document.getElementById('raffle-title-display');
-            const entryPanel = document.getElementById('entry-panel');
-            const adminConfigPanel = document.getElementById('admin-config-panel');
-            const participantView = document.getElementById('participant-view');
-            const winnerDisplay = document.getElementById('winner-display');
-            const adminPasswordInput = document.getElementById('admin-password');
-            const adminEntryBtn = document.getElementById('admin-entry-btn');
-            const customerEntryBtn = document.getElementById('customer-entry-btn');
-            const loginBtn = document.getElementById('login-btn');
-            const loginError = document.getElementById('login-error');
-            const configSection = document.getElementById('config-section');
-            const manageSection = document.getElementById('manage-section');
-            const raffleTitleInput = document.getElementById('raffle-title');
-            const totalNumbersInput = document.getElementById('total-numbers');
-            const rafflePriceInput = document.getElementById('raffle-price');
-            const createRaffleBtn = document.getElementById('create-raffle-btn');
-            const qrUrlInput = document.getElementById('qr-url');
-            const generateQrBtn = document.getElementById('generate-qr-btn');
-            const logoutBtn = document.getElementById('logout-btn');
-            const resetRaffleBtn = document.getElementById('reset-raffle-btn');
-            const raffleGrid = document.getElementById('raffle-grid');
-            const qrCodeContainer = document.getElementById('qr-code-container');
-            const winnerNumberEl = document.getElementById('winner-number');
-            const winnerNameEl = document.getElementById('winner-name');
-            const winnerPhoneEl = document.getElementById('winner-phone');
-            const toggleListBtn = document.getElementById('toggle-list-btn');
-            const participantListContainer = document.getElementById('participant-list-container');
-            const exportCsvBtn = document.getElementById('export-csv-btn');
-            const participantListBody = document.getElementById('participant-list-body');
-            const modalOverlay = document.getElementById('modal-overlay');
-            const modalNumberDisplay = document.getElementById('modal-number-display');
-            const modalPriceDisplay = document.getElementById('modal-price-display');
-            const participantNameInput = document.getElementById('participant-name-input');
-            const participantPhoneInput = document.getElementById('participant-phone-input');
-            const confirmNameBtn = document.getElementById('confirm-name-btn');
-            const cancelNameBtn = document.getElementById('cancel-name-btn');
-
-            // --- FUNCIÓN AUXILIAR ---
-            function formatNumber(num) {
-                return String(num).padStart(2, '0');
-            }
-
-            // --- LÓGICA DE LA APLICACIÓN ---
-            function updateUI(isAdmin = false) {
-                [entryPanel, adminConfigPanel, participantView, winnerDisplay].forEach(el => el.classList.add('hidden'));
-                businessLogo.classList.add('hidden');
-                
-                mainTitle.textContent = raffleState.isConfigured ? 'Rifa Activa' : 'Sistema de Rifa';
-                raffleTitleDisplay.textContent = raffleState.title || '';
-
-                if (isAdmin) {
-                    // --- VISTA DE ADMINISTRADOR ---
-                    adminConfigPanel.classList.remove('hidden');
-                    if (raffleState.isConfigured) {
-                        manageSection.classList.remove('hidden');
-                        configSection.classList.add('hidden');
-                        generateParticipantList();
-                        generateRaffleGrid(); // También generar la grilla para que el admin la vea
-                    } else {
-                        manageSection.classList.add('hidden');
-                        configSection.classList.remove('hidden');
-                    }
-                } else {
-                    // --- VISTA PÚBLICA (CLIENTE) ---
-                    entryPanel.classList.remove('hidden');
-                    // Resetear el formulario de login por si acaso
-                    document.getElementById('admin-login-form').classList.add('hidden');
-                    document.getElementById('entry-buttons').classList.remove('hidden');
-                }
-            }
-
-            function generateRaffleGrid() {
-                raffleGrid.innerHTML = '';
-                if (!raffleState.totalNumbers) return;
-                for (let i = 1; i <= raffleState.totalNumbers; i++) {
-                    const numberEl = document.createElement('div');
-                    numberEl.classList.add('raffle-number');
-                    numberEl.dataset.number = i;
-
-                    const numberSpan = document.createElement('span');
-                    numberSpan.classList.add('number');
-                    numberSpan.textContent = formatNumber(i);
-                    
-                    const participantSpan = document.createElement('span');
-                    participantSpan.classList.add('participant');
-
-                    if (raffleState.participants && raffleState.participants[i]) {
-                        const participant = raffleState.participants[i];
-                        numberEl.classList.add('taken');
-                        participantSpan.textContent = participant.name;
-                        numberEl.title = `Nombre: ${participant.name}\nTeléfono: ${participant.phone || 'N/A'}`;
-                    } else {
-                        numberEl.classList.add('available');
-                        participantSpan.textContent = 'Disponible';
-                    }
-                    
-                    numberEl.appendChild(numberSpan);
-                    numberEl.appendChild(participantSpan);
-                    raffleGrid.appendChild(numberEl);
-                }
-            }
-
-            function generateParticipantList() {
-                participantListBody.innerHTML = '';
-                if (!raffleState.participants) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td colspan="4" style="text-align: center;">Aún no hay participantes.</td>`;
-                    participantListBody.appendChild(row);
-                    return;
-                }
-                const sortedParticipantKeys = Object.keys(raffleState.participants).sort((a, b) => parseInt(a) - parseInt(b));
-
-                if (sortedParticipantKeys.length === 0) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td colspan="4" style="text-align: center;">Aún no hay participantes.</td>`;
-                    participantListBody.appendChild(row);
-                    return;
-                }
-
-                for (const number of sortedParticipantKeys) {
-                    const participant = raffleState.participants[number];
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td>${formatNumber(number)}</td>
-                                     <td>${participant.name}</td>
-                                     <td>${participant.phone || 'No registrado'}</td>
-                                     <td class="actions-cell">
-                                        <button class="btn btn-primary action-btn edit-btn" data-number="${number}">Editar</button>
-                                        <button class="btn btn-danger action-btn delete-btn" data-number="${number}">Eliminar</button>
-                                     </td>`;
-                    participantListBody.appendChild(row);
-                }
-            }
-
-            function handleParticipantListClick(e) {
-                const target = e.target;
-                const number = target.dataset.number;
-
-                if (target.classList.contains('edit-btn')) {
-                    const participant = raffleState.participants[number];
-                    currentNumberToRegister = number;
-                    document.getElementById('modal-title').textContent = 'Editar Participante';
-                    modalNumberDisplay.textContent = formatNumber(number);
-                    modalPriceDisplay.textContent = (raffleState.price || 0).toLocaleString('es-CO');
-                    participantNameInput.value = participant.name;
-                    participantPhoneInput.value = participant.phone || '';
-                    modalOverlay.classList.add('visible');
-                    participantNameInput.focus();
-                } else if (target.classList.contains('delete-btn')) {
-                    if (confirm(`¿Estás seguro de que quieres eliminar al participante del número ${formatNumber(number)}? El número quedará disponible.`)) {
-                        // CORRECCIÓN: Apuntar al número específico para eliminarlo, no a todos los participantes.
-                        database.ref(`raffleState/participants/${number}`).remove();
-                    }
-                }
-            }
-
-            function handleNumberClick(e) {
-                const target = e.target.closest('.raffle-number');
-                if (!target || !target.classList.contains('available')) return;
-
-                const number = target.dataset.number;
-                currentNumberToRegister = number;
-                document.getElementById('modal-title').textContent = 'Registrar Número';
-                modalNumberDisplay.textContent = formatNumber(number);
-                modalPriceDisplay.textContent = (raffleState.price || 0).toLocaleString('es-CO');
-                modalOverlay.classList.add('visible');
-                participantNameInput.focus();
-            }
-
-            function closeModal() {
-                modalOverlay.classList.remove('visible');
-                participantNameInput.value = '';
-                participantPhoneInput.value = '';
-                currentNumberToRegister = null;
-            }
-
-            // --- MANEJADORES DE EVENTOS ---
-            adminEntryBtn.addEventListener('click', () => {
-                document.getElementById('admin-login-form').classList.remove('hidden');
-                document.getElementById('entry-buttons').classList.add('hidden');
-                adminPasswordInput.focus();
-            });
-
-            customerEntryBtn.addEventListener('click', () => {
-                if (raffleState && raffleState.isConfigured) {
-                    entryPanel.classList.add('hidden');
-                    participantView.classList.remove('hidden');
-                    businessLogo.classList.remove('hidden');
-                    generateRaffleGrid();
-                } else {
-                    alert('La rifa no está disponible en este momento. Vuelve a intentarlo más tarde.');
-                }
-            });
-
-            loginBtn.addEventListener('click', () => {
-                if (adminPasswordInput.value === ADMIN_PASSWORD) {
-                    sessionStorage.setItem('isAdmin', 'true');
-                    loginError.classList.add('hidden');
-                    updateUI(true);
-                } else {
-                    loginError.classList.remove('hidden');
-                }
-            });
-
-            createRaffleBtn.addEventListener('click', () => {
-                const title = raffleTitleInput.value.trim();
-                const totalNumbers = parseInt(totalNumbersInput.value, 10);
-                const price = parseInt(rafflePriceInput.value, 10);
-                if (!title || !totalNumbers || totalNumbers <= 0 || isNaN(price) || price < 0) {
-                    alert('Por favor, completa todos los campos de configuración correctamente.');
-                    return;
-                }
-                const newState = { title, totalNumbers, price, participants: {}, isConfigured: true };
-                raffleRef.set(newState);
-            });
-
-            logoutBtn.addEventListener('click', () => {
-                sessionStorage.removeItem('isAdmin');
-                window.location.reload();
-            });
-
-            resetRaffleBtn.addEventListener('click', () => {
-                if (confirm('¿Estás seguro de que quieres reiniciar la rifa? Se perderán todos los datos actuales.')) {
-                    raffleRef.remove();
-                    sessionStorage.removeItem('isAdmin');
-                    window.location.reload();
-                }
-            });
-
-            confirmNameBtn.addEventListener('click', () => {
-                const name = participantNameInput.value.trim();
-                const phone = participantPhoneInput.value.trim();
-                if (name && currentNumberToRegister) {
-                    const participantData = { name, phone };
-                    // CORRECCIÓN: Usar el número actual para crear o actualizar una entrada específica
-                    // en lugar de sobrescribir todos los participantes.
-                    database.ref(`raffleState/participants/${currentNumberToRegister}`).set(participantData);
-                    closeModal();
-                } else {
-                    alert('Por favor, ingresa al menos un nombre.');
-                }
-            });
-            
-            // --- EVENTOS SIMPLES ---
-            participantListBody.addEventListener('click', handleParticipantListClick);
-            raffleGrid.addEventListener('click', handleNumberClick);
-            cancelNameBtn.addEventListener('click', closeModal);
-            modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-            toggleListBtn.addEventListener('click', () => participantListContainer.classList.toggle('hidden'));
-            
-            // --- INICIALIZACIÓN ---
-            raffleRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                raffleState = data ? data : { isConfigured: false };
-                const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
-                updateUI(isAdmin);
-            });
-        });
-    </script>
+    <!-- El script ahora se carga desde un archivo externo -->
+    <script src="script.js"></script>
 </body>
 </html>

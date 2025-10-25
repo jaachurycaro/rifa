@@ -111,3 +111,26 @@ p { line-height: 1.6 }
 
 .confetti { position: absolute; width: 8px; height: 15px; background-color: var(--primary-glow); opacity: .9; animation: fall 5s linear forwards; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%) }
 @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0 } }
+
+.raffle-details {
+    font-size: 1.2em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--success-glow);
+    text-shadow: 0 0 8px var(--success-glow);
+    text-align: center;
+    padding: 10px;
+    border: 1px dashed var(--success-glow);
+    border-radius: var(--border-radius);
+    background: rgba(57, 255, 20, 0.05);
+}
+
+.raffle-prize-info {
+    font-size: 0.9em;
+    font-style: italic;
+    text-align: center;
+    color: var(--text-color);
+    opacity: 0.8;
+    margin-top: -10px;
+}
