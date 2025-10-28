@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainTitle = document.getElementById('main-title');
     const raffleTitleDisplay = document.getElementById('raffle-title-display');
     const rafflePrizeInfo = document.getElementById('raffle-prize-info');
+    const rafflePaymentWarning = document.getElementById('raffle-payment-warning');
     const raffleDetailsDisplay = document.getElementById('raffle-details-display');
     const entryPanel = document.getElementById('entry-panel');
     const adminConfigPanel = document.getElementById('admin-config-panel');
@@ -66,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalPriceDisplay = document.getElementById('modal-price-display');
     const participantNameInput = document.getElementById('participant-name-input');
     const participantPhoneInput = document.getElementById('participant-phone-input');
-    const confirmNameBtn = document.getElementById('confirm-name-btn');
     const cancelNameBtn = document.getElementById('cancel-name-btn');
     const payWhatsappBtn = document.getElementById('pay-whatsapp-btn');
     const exitParticipantViewBtn = document.getElementById('exit-participant-view-btn');
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LÓGICA DE LA APLICACIÓN ---
     function updateUI(isAdmin = false) {
         // Ocultar todos los paneles principales y elementos específicos al inicio
-        [entryPanel, adminConfigPanel, participantView, winnerDisplay, rafflePrizeInfo, document.getElementById('admin-login-form')].forEach(el => el.classList.add('hidden'));
+        [entryPanel, adminConfigPanel, participantView, winnerDisplay, rafflePrizeInfo, rafflePaymentWarning, document.getElementById('admin-login-form')].forEach(el => el.classList.add('hidden'));
         businessLogo.classList.add('hidden');
         loginError.classList.add('hidden'); // Asegurarse de que el error de login esté oculto
 
@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (raffleState.isConfigured) {
             rafflePrizeInfo.classList.remove('hidden');
+            rafflePaymentWarning.classList.remove('hidden');
             const dateText = raffleState.date ? `Fecha: ${raffleState.date}` : '';
             const lotteryText = raffleState.lotteryInfo || '';
             raffleDetailsDisplay.textContent = `${lotteryText} - ${dateText}`;
@@ -328,27 +329,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    confirmNameBtn.addEventListener('click', () => {
+    payWhatsappBtn.addEventListener('click', () => {
         const name = participantNameInput.value.trim();
         const phone = participantPhoneInput.value.trim();
-        if (name && currentNumberToRegister) {
-            const participantData = { name, phone };
-            database.ref(`raffleState/participants/${currentNumberToRegister}`).set(participantData);
-            closeModal();
-        } else {
-            alert('Por favor, ingresa al menos un nombre.');
-        }
-    });
 
-    payWhatsappBtn.addEventListener('click', () => {
-        if (currentNumberToRegister) {
-            const phoneNumber = '573214538003'; // Número de WhatsApp con código de país (57 para Colombia)
-            const message = `Hola, quiero realizar el pago para el número de rifa: ${formatNumber(currentNumberToRegister)}.`;
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        } else {
-            alert('No hay un número seleccionado para pagar.');
+        if (!name || currentNumberToRegister === null) {
+            alert('Por favor, ingresa al menos un nombre.');
+            return;
         }
+
+        const participantData = { name, phone };
+        // 1. Guardar los datos en Firebase
+        database.ref(`raffleState/participants/${currentNumberToRegister}`).set(participantData)
+            .then(() => {
+                // 2. Si se guarda correctamente, abrir WhatsApp
+                const phoneNumber = '573214538003'; // Número de WhatsApp con código de país (57 para Colombia)
+                const message = `Hola, quiero realizar el pago para el número de rifa: ${formatNumber(currentNumberToRegister)}. Mi nombre es ${name}.`;
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                closeModal(); // Cerrar el modal después de todo
+            })
+            .catch(error => {
+                console.error("Error al guardar el participante:", error);
+                alert("Hubo un error al guardar tu número. Por favor, inténtalo de nuevo.");
+            });
     });
 
     generateQrBtn.addEventListener('click', () => {

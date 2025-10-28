@@ -142,3 +142,9 @@ p { line-height: 1.6 }
     text-decoration: none;
     text-align: center;
 }
+
+.raffle-payment-warning {
+    color: var(--danger-glow);
+    font-weight: bold;
+    text-shadow: 0 0 5px var(--danger-glow);
+}
