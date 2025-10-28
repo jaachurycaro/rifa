@@ -93,8 +93,8 @@ p { line-height: 1.6 }
 #name-modal h3 { color: var(--secondary-glow); text-shadow: 0 0 5px var(--secondary-glow) }
 .modal-price { font-size: 1.2em; font-weight: 700; color: var(--success-glow); text-shadow: 0 0 8px var(--success-glow); margin: 10px 0 }
 #modal-buttons { margin-top: 20px; display: flex; justify-content: space-around }
-
-#participant-list-container { margin-top: 20px; max-height: 300px; overflow-y: auto; border: 1px solid var(--primary-glow); border-radius: var(--border-radius); padding: 15px; background-color: rgba(0, 0, 0, .2) }
+#modal-buttons .btn { padding: 12px 15px; } /* Ajuste para que quepan mejor los botones */
+#participant-list-container { margin-top: 20px; max-height: 400px; overflow-y: auto; border: 1px solid var(--primary-glow); border-radius: var(--border-radius); padding: 15px; background-color: rgba(0, 0, 0, .2) }
 #participant-table { width: 100%; border-collapse: collapse }
 #participant-table th, #participant-table td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(0, 229, 255, .2) }
 #participant-table th { color: var(--primary-glow); font-weight: 700; position: sticky; top: 0; background-color: var(--container-bg) }
@@ -103,7 +103,7 @@ p { line-height: 1.6 }
 #manage-section { margin-top: 20px }
 .ml-10 { margin-left: 10px }
 .mt-10 { margin-top: 10px }
-.download-qr-link { display: block; margin-top: 10px; color: var(--primary-glow) }
+.mt-20 { margin-top: 20px; }
 
 #business-logo { display: block; margin: 20px auto; max-width: 150px; border-radius: 50%; border: 2px solid var(--primary-glow); box-shadow: 0 0 15px rgba(0, 229, 255, .5) }
 .action-btn { padding: 5px 10px; font-size: 12px; margin-right: 5px }
@@ -133,4 +133,12 @@ p { line-height: 1.6 }
     color: var(--text-color);
     opacity: 0.8;
     margin-top: -10px;
+}
+
+.download-qr-link {
+    display: block;
+    margin-top: 15px;
+    color: var(--primary-glow);
+    text-decoration: none;
+    text-align: center;
 }

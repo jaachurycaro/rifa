@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let raffleState = {}; // El estado ahora vendrá de Firebase
     let currentNumberToRegister = null;
+    let isLoginFormVisible = false; // Nueva variable de estado para controlar la visibilidad del formulario de login
 
     // --- ELEMENTOS DEL DOM ---
     const businessLogo = document.getElementById('business-logo');
@@ -68,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const participantPhoneInput = document.getElementById('participant-phone-input');
     const confirmNameBtn = document.getElementById('confirm-name-btn');
     const cancelNameBtn = document.getElementById('cancel-name-btn');
+    const payWhatsappBtn = document.getElementById('pay-whatsapp-btn');
     const exitParticipantViewBtn = document.getElementById('exit-participant-view-btn');
 
     // --- FUNCIÓN AUXILIAR ---
@@ -77,12 +79,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LÓGICA DE LA APLICACIÓN ---
     function updateUI(isAdmin = false) {
-        [entryPanel, adminConfigPanel, participantView, winnerDisplay, rafflePrizeInfo].forEach(el => el.classList.add('hidden'));
+        // Ocultar todos los paneles principales y elementos específicos al inicio
+        [entryPanel, adminConfigPanel, participantView, winnerDisplay, rafflePrizeInfo, document.getElementById('admin-login-form')].forEach(el => el.classList.add('hidden'));
         businessLogo.classList.add('hidden');
+        loginError.classList.add('hidden'); // Asegurarse de que el error de login esté oculto
 
         mainTitle.textContent = raffleState.isConfigured ? 'Rifa Activa' : 'Sistema de Rifa';
         raffleTitleDisplay.textContent = raffleState.title || '';
         
+        raffleDetailsDisplay.textContent = ''; // Limpiar detalles de la rifa por defecto
+
         if (raffleState.isConfigured) {
             rafflePrizeInfo.classList.remove('hidden');
             const dateText = raffleState.date ? `Fecha: ${raffleState.date}` : '';
@@ -106,10 +112,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             // --- VISTA PÚBLICA (CLIENTE) ---
-            entryPanel.classList.remove('hidden');
-            // Resetear el formulario de login por si acaso
-            document.getElementById('admin-login-form').classList.add('hidden');
-            document.getElementById('entry-buttons').classList.remove('hidden');
+            entryPanel.classList.remove('hidden'); // Mostrar el panel de entrada
+
+            if (isLoginFormVisible) {
+                // Si el usuario ha hecho clic en "Administrar Rifa", mostrar el formulario de login
+                document.getElementById('admin-login-form').classList.remove('hidden');
+                document.getElementById('entry-buttons').classList.add('hidden');
+            } else {
+                // De lo contrario, mostrar los botones de entrada (Ver Rifa / Administrar Rifa)
+                document.getElementById('admin-login-form').classList.add('hidden');
+                document.getElementById('entry-buttons').classList.remove('hidden');
+            }
         }
     }
 
@@ -244,10 +257,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- MANEJADORES DE EVENTOS ---
     adminEntryBtn.addEventListener('click', () => {
+        isLoginFormVisible = true; // El usuario quiere ver el formulario de login
         document.getElementById('admin-login-form').classList.remove('hidden');
         document.getElementById('entry-buttons').classList.add('hidden');
+        adminEmailInput.value = ''; // Limpiar campos
+        adminPasswordInput.value = '';
+        loginError.classList.add('hidden'); // Ocultar errores previos
         adminPasswordInput.focus();
-    });
+    });    
 
     customerEntryBtn.addEventListener('click', () => {
         if (raffleState && raffleState.isConfigured) {
@@ -274,11 +291,14 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((userCredential) => {
                 // El éxito se maneja con onAuthStateChanged, no es necesario hacer nada aquí.
             })
-            .catch((error) => {
+            .catch((error) => { // Manejar errores de inicio de sesión
+                console.error("Error de autenticación de Firebase:", error); // Esto nos dará más detalles en la consola.
                 loginError.textContent = 'Error: Credenciales incorrectas.';
                 loginError.classList.remove('hidden');
+                // isLoginFormVisible se mantiene true para que el usuario pueda reintentar
             });
     });
+
 
     createRaffleBtn.addEventListener('click', () => {
         const title = raffleTitleInput.value.trim();
@@ -297,6 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     logoutBtn.addEventListener('click', () => {
         auth.signOut();
+        isLoginFormVisible = false; // Resetear el estado del formulario de login al cerrar sesión
     });
 
     resetRaffleBtn.addEventListener('click', () => {
@@ -318,6 +339,49 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             alert('Por favor, ingresa al menos un nombre.');
         }
+    });
+
+    payWhatsappBtn.addEventListener('click', () => {
+        if (currentNumberToRegister) {
+            const phoneNumber = '573214538003'; // Número de WhatsApp con código de país (57 para Colombia)
+            const message = `Hola, quiero realizar el pago para el número de rifa: ${formatNumber(currentNumberToRegister)}.`;
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        } else {
+            alert('No hay un número seleccionado para pagar.');
+        }
+    });
+
+    generateQrBtn.addEventListener('click', () => {
+        const url = qrUrlInput.value.trim();
+        if (!url) {
+            alert('Por favor, ingresa una URL para generar el código QR.');
+            return;
+        }
+
+        // Limpiar el contenedor de QR anterior
+        qrCodeContainer.innerHTML = '';
+
+        // Crear el div donde se dibujará el QR
+        const qrCodeElement = document.createElement('div');
+        qrCodeElement.id = 'qr-code'; // El CSS ya tiene estilos para este ID
+        qrCodeContainer.appendChild(qrCodeElement);
+
+        // Generar el código QR
+        new QRCode(qrCodeElement, {
+            text: url,
+            width: 150,
+            height: 150,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // Crear y añadir el enlace de descarga
+        const downloadLink = document.createElement('a');
+        downloadLink.textContent = 'Descargar QR';
+        downloadLink.classList.add('download-qr-link');
+        qrCodeContainer.appendChild(downloadLink);
     });
 
     // --- EVENTOS SIMPLES ---
