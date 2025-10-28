@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const configSection = document.getElementById('config-section');
     const manageSection = document.getElementById('manage-section');
     const raffleTitleInput = document.getElementById('raffle-title');
-    const totalNumbersInput = document.getElementById('total-numbers');
     const rafflePriceInput = document.getElementById('raffle-price');
     const raffleDateInput = document.getElementById('raffle-date');
     const raffleLotteryInfoInput = document.getElementById('raffle-lottery-info');
@@ -129,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateRaffleGrid() {
         raffleGrid.innerHTML = '';
         if (!raffleState.totalNumbers) return;
-        for (let i = 1; i <= raffleState.totalNumbers; i++) {
+        for (let i = 0; i < raffleState.totalNumbers; i++) {
             const numberEl = document.createElement('div');
             numberEl.classList.add('raffle-number');
             numberEl.dataset.number = i;
@@ -302,12 +301,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createRaffleBtn.addEventListener('click', () => {
         const title = raffleTitleInput.value.trim();
-        const totalNumbers = parseInt(totalNumbersInput.value, 10);
+        const totalNumbers = 100; // Se establece un valor fijo de 100 boletas
         const price = parseInt(rafflePriceInput.value, 10);
         const date = raffleDateInput.value;
         const lotteryInfo = raffleLotteryInfoInput.value.trim();
 
-        if (!title || !totalNumbers || totalNumbers <= 0 || isNaN(price) || price < 0 || !date || !lotteryInfo) {
+        if (!title || isNaN(price) || price < 0 || !date || !lotteryInfo) {
             alert('Por favor, completa todos los campos de configuración correctamente.');
             return;
         }
